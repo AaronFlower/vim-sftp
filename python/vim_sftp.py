@@ -88,13 +88,24 @@ def connect(config):
         print("*** Caught exception: %s:%s " % (e.__class__, e))
 
 def sftp_put():
+    file_name = vim.current.buffer.name
     config_file, config = _load_config()
     config['config_file'] = config_file
+
     if SftpCache.get(config_file) == None:
         connect(config)
     else:
         print('already connected')
         print(SftpCache.get(config_file))
+
+    sftp = SftpCache.get(config_file)
+    config_dir = dirname(config_file)
+    remote_file = sftp['remote_path'] + file_name[len(config_dir):]
+    print(file_name)
+    print(remote_file)
+    sftp['conn'].put(file_name, remote_file)
+    vim.command("echom 'upload succeed!'")
+
     return None
 
 def sftp_clear():
