@@ -1,10 +1,5 @@
-echom "load sftp config"
-echom expand("<sfile>")
-echom resolve(expand('<sfile>:p'))
-echom fnamemodify(resolve(expand('<sfile>:p')), ':h')
-
 function! g:SftpUploadFile()
-    echom "call SftpUploadFile()"
+    python3 vim_sftp.sftp_put()
 endfunction
 
 nnoremap <leader>t :call g:SftpUploadFile()<cr>
@@ -13,6 +8,13 @@ if !has('python3')
     echom "Vim has to be compliled with +python3 to run this"
     finish
 endif
+
+if exists('g:vim_sftp_plugin_loaded')
+    finish
+endif
+
+" The rest is the plugin VimL Code
+let g:vim_sftp_plugin_loaded = 1
 
 let s:plugin_root_dir =  fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
