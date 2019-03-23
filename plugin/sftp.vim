@@ -2,7 +2,17 @@ function! g:SftpUploadFile()
     python3 vim_sftp.sftp_put()
 endfunction
 
+function! g:SftpClearAll()
+    python3 vim_sftp.sftp_clear()
+endfunction
+
 nnoremap <leader>t :call g:SftpUploadFile()<cr>
+
+augroup vimsftp
+    autocmd!
+    autocmd VimLeavePre * :call g:SftpClearAll()
+augroup END
+
 
 if !has('python3')
     echom "Vim has to be compliled with +python3 to run this"

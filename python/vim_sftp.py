@@ -1,6 +1,8 @@
+import os
 import vim
 from os.path import dirname, isfile
 import commentjson as json
+import paramiko
 
 SftpCache = {}
 
@@ -65,8 +67,6 @@ def connect(config):
     # now, connect and use paramiko Transport to negotiate SSH2
     # accross the connection.
     try:
-        print(host, port)
-        print(user, password)
         t = paramiko.Transport((host, int(port)))
         t.connect(
             hostkey,
@@ -77,17 +77,31 @@ def connect(config):
             # gss_kex=DoGSSAPIKeyExchange,
         )
         sftp = paramiko.SFTPClient.from_transport(t)
+        SftpCache[config.get('config_file')] = {
+            'conn': sftp,
+            'remote_path': remote_path
+        }
         # create observer
-        print(' connection succeed!')
+        vim.command("echom 'connection succeed!'")
 
     except Exception as e:
         print("*** Caught exception: %s:%s " % (e.__class__, e))
 
 def sftp_put():
     config_file, config = _load_config()
+    config['config_file'] = config_file
     if SftpCache.get(config_file) == None:
-        print("to connenct")
         connect(config)
     else:
         print('already connected')
+        print(SftpCache.get(config_file))
+    return None
+
+def sftp_clear():
+    if SftpCache:
+        vim.command("echom 'clear the sftp connection'")
+        for _, item in SftpCache.items():
+            print("close item:", item)
+            item.get('conn').close()
+        vim.command("sleep 300m")
     return None

@@ -4,6 +4,12 @@
 对于文件的上传可以放在一个 map 中进行缓存。
 
 
+### 调试 Vim Log
+
+
+```
+vim -V9myVim.log
+```
 
 ### References
 
