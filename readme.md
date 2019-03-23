@@ -11,6 +11,11 @@
 vim -V9myVim.log
 ```
 
+### TODO
+
+[-] dir create -p
+[-] doc
+
 ### References
 
 1. [Write Vim Plugin in Python](http://candidtim.github.io/vim/2017/08/11/write-vim-plugin-in-python.html)
