@@ -21,6 +21,8 @@ vim -V9myVim.log
 
 [-] dir create -p
 [-] doc
+[-] update cryptography version, and add requirements.
+[-] json parse support sublime.
 
 ### References
 

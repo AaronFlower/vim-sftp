@@ -10,7 +10,7 @@ def _load_config():
     '''
         Find the sftp-config.json 文件
     '''
-    config_file_str = 'sftp-config.json'
+    config_file_str = vim.eval('g:sftp_config_name')
     file_name = vim.current.buffer.name
     cur_dir = dirname(file_name)
     config_file = ''
@@ -91,12 +91,30 @@ def connect(config):
         print("*** Caught exception: %s:%s " % (e.__class__, e))
         return None
 
+def mkdir_p(sftp, remote_directory):
+    """Change to this directory, recursively making new folders if needed.
+    Returns True if any folders were created."""
+    if remote_directory == '/':
+        # absolute path so change directory to root
+        sftp.chdir('/')
+        return
+    if remote_directory == '':
+        # top-level relative directory must exist
+        return
+    try:
+        sftp.chdir(remote_directory) # sub-directory exists
+    except IOError:
+        dirname, basename = os.path.split(remote_directory.rstrip('/'))
+        mkdir_p(sftp, dirname) # make parent directories
+        sftp.mkdir(basename) # sub-directory missing, so created it
+        sftp.chdir(basename)
+        return True
+
 def sftp_put():
-    print("sftp-config-vars", vim.eval('g:sftp_config_name'))
     file_name = vim.current.buffer.name
     config_file, config = _load_config()
     config['config_file'] = config_file
-    sftp =SftpCache.get(config_file)
+    sftp = SftpCache.get(config_file)
 
     if sftp == None:
         sftp = connect(config)
@@ -109,10 +127,25 @@ def sftp_put():
 
     config_dir = dirname(config_file)
     remote_file = sftp['remote_path'] + file_name[len(config_dir):]
+    remote_dir =  dirname(remote_file)
+    conn = sftp.get('conn')
+    try:
+        conn.chdir(remote_dir)  # Test if remote_path exists
+    except IOError as e:
+        print('change dir success')
+        mkdir_p(conn, remote_dir)
+        conn.chdir(remote_dir)
+
+
+    print('has change the file')
+    try:
+        conn.put(file_name, remote_file)
+    except Exception:
+        vim.command("echom 'upload failed!'")
     print(file_name)
     print(remote_file)
     print(dirname(remote_file))
-    sftp['conn'].put(file_name, remote_file)
+    # sftp['conn'].put(file_name, remote_file)
     vim.command("echom 'upload succeed!'")
 
     return None

@@ -10,7 +10,7 @@ function! g:SftpClearAll()
     python3 vim_sftp.sftp_clear()
 endfunction
 
-nnoremap <leader>t :call g:SftpUploadFile()<cr>
+nnoremap <leader>t :call g:SftpUploadFile()<cr><cr>
 
 augroup vimsftp
     autocmd!
