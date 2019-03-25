@@ -1,3 +1,7 @@
+if !exists('g:sftp_config_name')
+    let g:sftp_config_name = 'sftp-config.json'
+endif
+
 function! g:SftpUploadFile()
     python3 vim_sftp.sftp_put()
 endfunction

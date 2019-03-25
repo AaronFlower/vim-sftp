@@ -48,7 +48,7 @@ def connect(config):
                 os.path.expanduser("~/ssh/known_hosts")
             )
         except IOError:
-            print("*** Unable to open host keys file")
+            print("*** Unable to open host keys file ***")
             host_keys = {}
 
     host = config.get("host")
@@ -77,32 +77,41 @@ def connect(config):
             # gss_kex=DoGSSAPIKeyExchange,
         )
         sftp = paramiko.SFTPClient.from_transport(t)
-        SftpCache[config.get('config_file')] = {
+        config_file = config.get('config_file')
+
+        SftpCache[config_file] = {
             'conn': sftp,
             'remote_path': remote_path
         }
         # create observer
         vim.command("echom 'connection succeed!'")
+        return SftpCache[config_file]
 
     except Exception as e:
         print("*** Caught exception: %s:%s " % (e.__class__, e))
+        return None
 
 def sftp_put():
+    print("sftp-config-vars", vim.eval('g:sftp_config_name'))
     file_name = vim.current.buffer.name
     config_file, config = _load_config()
     config['config_file'] = config_file
+    sftp =SftpCache.get(config_file)
 
-    if SftpCache.get(config_file) == None:
-        connect(config)
+    if sftp == None:
+        sftp = connect(config)
     else:
         print('already connected')
-        print(SftpCache.get(config_file))
 
-    sftp = SftpCache.get(config_file)
+    if sftp == None:
+        print('SFTP connect failed! ')
+        return
+
     config_dir = dirname(config_file)
     remote_file = sftp['remote_path'] + file_name[len(config_dir):]
     print(file_name)
     print(remote_file)
+    print(dirname(remote_file))
     sftp['conn'].put(file_name, remote_file)
     vim.command("echom 'upload succeed!'")
 
