@@ -19,12 +19,12 @@ vim -V9myVim.log
 
 ### TODO
 
-[x] dir create -p
-[-] update cryptography version, and add requirements.
-[-] json parse support sublime.
-[-] Add ignore folds.
-[-] Add Sync from remote file
-[-] doc
+- [x] dir create -p
+- [x] json parse support sublime.
+- [ ] update cryptography version, and add requirements.
+- [ ] Add ignore folds.
+- [ ] Add Sync from remote file
+- [ ] doc
 
 ### References
 
