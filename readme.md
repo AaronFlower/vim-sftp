@@ -19,11 +19,15 @@ vim -V9myVim.log
 
 ### TODO
 
-[-] dir create -p
-[-] doc
+[x] dir create -p
 [-] update cryptography version, and add requirements.
 [-] json parse support sublime.
+[-] Add ignore folds.
+[-] Add Sync from remote file
+[-] doc
 
 ### References
 
 1. [Write Vim Plugin in Python](http://candidtim.github.io/vim/2017/08/11/write-vim-plugin-in-python.html)
+2. [sftp create remote](https://stackoverflow.com/questions/14819681/upload-files-using-sftp-in-python-but-create-directories-if-path-doesnt-exist?answertab=votes#tab-top)
+3. [json cleaner](https://gist.github.com/AaronFlower/2ba0dce3ad9d78bcaa00a017ecdb7c57)

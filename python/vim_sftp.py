@@ -1,14 +1,15 @@
 import os
 import vim
 from os.path import dirname, isfile
-import commentjson as json
 import paramiko
+import jsonutil as util
+import json
 
 SftpCache = {}
 
 def _load_config():
     '''
-        Find the sftp-config.json 文件
+        Find the sftp config file
     '''
     config_file_str = vim.eval('g:sftp_config_name')
     file_name = vim.current.buffer.name
@@ -25,8 +26,11 @@ def _load_config():
         cur_dir = dirname(cur_dir)
 
     try:
-        with open(config_file) as file:
-            config = json.load(file)
+        with open(config_file, 'r') as cfile:
+            content = cfile.read()
+            content = util.remove_comments(content)
+            content = util.remove_trailing_commas(content)
+            config = json.loads(content)
             return config_file, config
     except json.JSONLibraryException as e:
         print("Parse sftp-config.json file failed.")
@@ -146,7 +150,7 @@ def sftp_put():
     print(remote_file)
     print(dirname(remote_file))
     # sftp['conn'].put(file_name, remote_file)
-    vim.command("echom 'upload succeed!'")
+    vim.command("echo 'upload succeed!'")
 
     return None
 
@@ -154,7 +158,6 @@ def sftp_clear():
     if SftpCache:
         vim.command("echom 'clear the sftp connection'")
         for _, item in SftpCache.items():
-            print("close item:", item)
             item.get('conn').close()
-        vim.command("sleep 300m")
+        vim.command("sleep 10m")
     return None
