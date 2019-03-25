@@ -25,6 +25,7 @@ vim -V9myVim.log
 - [ ] Add ignore folds.
 - [ ] Add Sync from remote file
 - [ ] doc
+- [ ] i18n, translate
 
 ### References
 
