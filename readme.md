@@ -21,9 +21,16 @@ vim -V9myVim.log
 
 - [x] dir create -p
 - [x] json parse support sublime.
+- [ ] refactor move sftp to autoload folder.
 - [ ] update cryptography version, and add requirements.
 - [ ] Add ignore folds.
 - [ ] Add Sync from remote file
+  1. SDownloadFrom
+    ```
+        command! -nargs=* SDownloadFrom :call sftp#upload
+        command! -nargs=* SUploadTo :call sftp#upload
+    ```
+  2. SUploadTo
 - [ ] doc
 - [ ] i18n, translate
 
