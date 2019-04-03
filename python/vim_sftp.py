@@ -144,7 +144,8 @@ def sftp_put():
     print('has change the file')
     try:
         conn.put(file_name, remote_file)
-    except Exception:
+    except Exception as e:
+        print(e)
         vim.command("echom 'upload failed!'")
     print(file_name)
     print(remote_file)
@@ -153,6 +154,12 @@ def sftp_put():
     vim.command("echo 'upload succeed!'")
 
     return None
+
+def sftp_upload_to(hasBang, folders):
+    print('python go hasBang, folders')
+    print(hasBang)
+    print(folders)
+    return
 
 def sftp_clear():
     if SftpCache:
