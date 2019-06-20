@@ -16,6 +16,13 @@ vim -V9myVim.log
 
 - `let g:sftp_config_file = 'sftp-config.json'`, 默认使用的是和 Sublime 中的 SFTP 插件配置文件名是一样的。可以通过在 `~/.vimrc` 中修改这个文件来配置配置自己的文件。
 
+### Upload
+
+```
+<leader>, "upload current file to remote
+SUpload <localFileOrFolder> <remoteFileOrFolder>
+SDown <remoteFileOrFolder> <localFileOrFolder>
+```
 
 ### TODO
 
